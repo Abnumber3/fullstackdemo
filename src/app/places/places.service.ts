@@ -22,7 +22,14 @@ export class PlacesService {
     )
   }
 
-  loadUserPlaces() {}
+  loadUserPlaces() {
+    return this.httpClient.get<{places: Place[]}>('http://localhost:3000/user-places').pipe(
+      tap((data)=>{
+        console.log('User places: ', data.places);
+        this.userPlaces.set(data.places)
+      })
+    )
+  }
 
   addPlaceToUserPlaces(place: Place) {}
 

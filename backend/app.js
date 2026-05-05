@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 
 import bodyParser from "body-parser";
 import express from "express";
+import { request } from "node:http";
 
 const app = express();
 
@@ -18,6 +19,11 @@ app.use((req, res, next) => {
   next();
 });
 
+
+
+
+// get request
+
 app.get("/places", async (req, res) => {
   await new Promise((resolve) => setTimeout(resolve, 3000));
 
@@ -29,6 +35,12 @@ app.get("/places", async (req, res) => {
 
   res.status(200).json({ places: placesData });
 });
+
+
+
+
+
+// get reqest to get user places
 
 app.get("/user-places", async (req, res) => {
   const fileContent = await fs.readFile("./data/user-places.json");
@@ -43,6 +55,9 @@ app.get("/user-places", async (req, res) => {
 
 
 
+
+
+// put request to add a place to user places
 app.put("/user-places", async (req, res) => {
   const placeId = req.body.placeId;
 
@@ -67,6 +82,9 @@ app.put("/user-places", async (req, res) => {
 
   res.status(200).json({ userPlaces: updatedUserPlaces });
 });
+
+
+
 
 
 

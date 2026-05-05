@@ -21,11 +21,15 @@ export class AvailablePlacesComponent implements OnInit {
   isFetching = signal<boolean>(false);
 
 
+  
   constructor(
     private placesService: PlacesService,
     private httpClient: HttpClient,
     private destroyRef: DestroyRef
   ) {}
+
+
+
 
   ngOnInit(): void {
     this.isFetching.set(true);
@@ -48,7 +52,13 @@ export class AvailablePlacesComponent implements OnInit {
   }
 
   receivedPlaces(place: Place)  {
- console.log('hello')
+    this.httpClient.put('http://localhost:3000/user-places', {
+      placeId: place.id
+    }).subscribe({
+      error: (()=>{
+        console.log('Error adding place to user places.');
+      }) 
+    })
 
 }
 }
