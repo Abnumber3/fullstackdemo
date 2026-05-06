@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DestroyRef } from '@angular/core';
 import { PlacesContainerComponent } from '../places-container/places-container.component';
 import { PlacesComponent } from '../places.component';
 import { signal } from '@angular/core';
@@ -14,7 +14,11 @@ import { PlacesService } from '../places.service';
   imports: [PlacesContainerComponent, PlacesComponent],
 })
 export class UserPlacesComponent implements OnInit {
-places = signal<Place[] | undefined>(undefined);
+
+   places = this.placeService.loadedUserPlaces;
+
+
+
 
 
 
@@ -27,6 +31,11 @@ constructor(
 
 
   ngOnInit(): void {
-   const
+  const userSubscription = this.placeService.loadUserPlaces().subscribe();
+ 
+
+  this.destroyRef.onDestroy(()=>{
+    userSubscription.unsubscribe()
+  })
   }
 }
