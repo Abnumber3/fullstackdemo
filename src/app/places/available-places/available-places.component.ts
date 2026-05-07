@@ -21,7 +21,7 @@ export class AvailablePlacesComponent implements OnInit {
   isFetching = signal<boolean>(false);
 
 
-  
+
   constructor(
     private placesService: PlacesService,
     private httpClient: HttpClient,
@@ -52,13 +52,11 @@ export class AvailablePlacesComponent implements OnInit {
   }
 
   receivedPlaces(place: Place)  {
-    this.httpClient.put('http://localhost:3000/user-places', {
-      placeId: place.id
-    }).subscribe({
-      error: (()=>{
-        console.log('Error adding place to user places.');
-      }) 
+   this.placesService.addPlaceToUserPlaces(place).subscribe({
+    error: ((err)=>{
+      console.log('Error adding place to users ', + err)
     })
+   })
 
 }
 }

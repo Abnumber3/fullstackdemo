@@ -24,7 +24,6 @@ export class UserPlacesComponent implements OnInit {
 
 constructor(
   private placeService: PlacesService,
-  private httpClient: HttpClient,
   private destroyRef: DestroyRef
 ) {}
   
@@ -32,10 +31,19 @@ constructor(
 
   ngOnInit(): void {
   const userSubscription = this.placeService.loadUserPlaces().subscribe();
- 
-
   this.destroyRef.onDestroy(()=>{
     userSubscription.unsubscribe()
   })
   }
+
+  deleteUserPlace(place: Place){
+
+    this.placeService.removeUserPlace(place).subscribe({
+      error: ((err)=>{
+        console.log('error removing user place. '+ err)
+      })
+    })
+  }
+
+  
 }
