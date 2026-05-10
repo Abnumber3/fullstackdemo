@@ -32,7 +32,7 @@ export class PlacesService {
   }
 
   addPlaceToUserPlaces(places: Place) {
-  return this.httpClient.put<{userPlaces: Place[]}>('http://localhost:3000/user-places', {
+  return this.httpClient.put<{userPlaces: Place[]}>('http://localhost:30000/user-places', {
     placeId: places.id
   }).pipe(
     tap((data)=>{
