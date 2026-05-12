@@ -32,31 +32,17 @@ export class AvailablePlacesComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.isFetching.set(true);
-    const placeSubscription = this.placesService.loadAvailablePlaces().pipe(
-      finalize(()=>{
-        this.isFetching.set(false);
-      })
-    ).subscribe({
+    this.placesService.loadAvailablePlaces().subscribe({
       next: ((data)=>{
-        this.places.set(data.places);
-      }),
-      error: ((err)=>{
-        console.log('Error fetching places.: ', err);
-        this.isFetching.set(false);
-      }),
-    })
-    this.destroyRef.onDestroy(()=>{
-      placeSubscription.unsubscribe();
+        this.places.set(data.places)
+      })
     })
   }
 
   receivedPlaces(place: Place)  {
-   this.placesService.addPlaceToUserPlaces(place).subscribe({
-    error: ((err)=>{
-      console.log('Error adding place to users ', + err)
-    })
-   })
 
 }
+
+
+
 }
