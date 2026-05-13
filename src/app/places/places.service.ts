@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { Place } from './place.model';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { tap, catchError } from 'rxjs';
+import { throwError } from 'rxjs';
 
 
 @Injectable({
@@ -32,11 +33,27 @@ export class PlacesService {
   }
 
   loadUserPlaces() {
-  
-  }
+  return this.httpClient
+    .get<{ place: Place[] }>('http://localhost:3000/user-places')
+    .pipe(
+      tap((data) => {
+        this.userPlaces.set(data.place);
+      }),
+
+      catchError((error) => {
+        console.error('Failed to load user places:', error);
+
+        // Optional fallback
+        this.userPlaces.set([]);
+
+        // Re-throw the error so components can react too
+        return throwError(() => error);
+      })
+    );
+}
 
   addPlaceToUserPlaces(places: Place) {
-    return this.httpClient.put<{place: Place}>('http://localhost:3000/places',{
+    return this.httpClient.put<{place: Place[]}>('http://localhost:3000/user-places',{
       placeId : places.id
     }).pipe(
       tap((data)=>{

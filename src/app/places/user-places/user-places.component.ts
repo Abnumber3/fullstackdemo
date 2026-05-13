@@ -30,7 +30,7 @@ constructor(
 
 
   ngOnInit(): void {
- 
+    this.placeService.loadUserPlaces().subscribe()
   }
 
   deleteUserPlace(place: Place){

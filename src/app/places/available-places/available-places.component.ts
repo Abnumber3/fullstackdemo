@@ -40,6 +40,7 @@ export class AvailablePlacesComponent implements OnInit {
   }
 
   receivedPlaces(place: Place)  {
+    
 
 }
 
