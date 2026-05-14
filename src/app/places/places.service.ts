@@ -34,10 +34,10 @@ export class PlacesService {
 
   loadUserPlaces() {
   return this.httpClient
-    .get<{ place: Place[] }>('http://localhost:3000/user-places')
+    .get< {places: Place[] }>('http://localhost:3000/user-places')
     .pipe(
       tap((data) => {
-        this.userPlaces.set(data.place);
+        this.userPlaces.set(data.places);
       }),
 
       catchError((error) => {
@@ -53,7 +53,7 @@ export class PlacesService {
 }
 
   addPlaceToUserPlaces(places: Place) {
-    return this.httpClient.put<{place: Place[]}>('http://localhost:3000/user-places',{
+    return this.httpClient.put<{place: Place}>('http://localhost:3000/user-places',{
       placeId : places.id
     }).pipe(
       tap((data)=>{
@@ -68,6 +68,16 @@ export class PlacesService {
   }
 
   removeUserPlace(place: Place) {
+    this.httpClient.delete(`http://localhost:3000/user-places/:${place.id}`).pipe(
+      tap(()=>{
+        this.userPlaces.update((currentData)=>{
+          return this.userPlaces().filter((placesData)=>{
+            return placesData.id !== place.id
+          })
+        })
+      })
+    )
+
 
 }
 

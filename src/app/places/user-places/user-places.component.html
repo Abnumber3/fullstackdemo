@@ -2,7 +2,7 @@
   
   
   @if (places()) {
-  <app-places [places]="places()!" (selectPlace)="deleteUserPlace($event)"> </app-places>
+  <app-places [places]="places()!" (click)="deleteUserPlace(places())"> </app-places>
   } @else if (places().length === 0) {
   <p class="fallback-text">Unfortunately, no places could be found.</p>
   }
