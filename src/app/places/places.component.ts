@@ -18,6 +18,7 @@ export class PlacesComponent {
 
 
   onSelectPlace(place: Place) {
-   this.placesSerivce.addPlaceToUserPlaces(place).subscribe();
+   this.selectPlace.emit(place);
+   console.log(place)
   }
 }

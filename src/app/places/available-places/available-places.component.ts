@@ -24,7 +24,6 @@ export class AvailablePlacesComponent implements OnInit {
 
   constructor(
     private placesService: PlacesService,
-    private httpClient: HttpClient,
     private destroyRef: DestroyRef
   ) {}
 
@@ -32,17 +31,19 @@ export class AvailablePlacesComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.placesService.loadAvailablePlaces().subscribe({
+    this.isFetching.set(true)
+    this.placesService.loadAvailablePlaces().pipe(
+      finalize(()=>{
+        this.isFetching.set(false)
+      })
+    ).subscribe({
       next: ((data)=>{
         this.places.set(data.places)
+        console.log(data.places)
       })
     })
   }
 
-  receivedPlaces(place: Place)  {
-    
-
-}
 
 
 

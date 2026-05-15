@@ -25,7 +25,7 @@ export class PlacesService {
   loadAvailablePlaces() {
   return   this.httpClient.get<{places: Place[]}>('http://localhost:3000/places').pipe(
       tap((data)=>{
-        console.log('places ' + data.places)
+        console.log('places ' + data)
       })
     )
 
@@ -52,33 +52,40 @@ export class PlacesService {
     );
 }
 
-  addPlaceToUserPlaces(places: Place) {
-    return this.httpClient.put<{place: Place}>('http://localhost:3000/user-places',{
-      placeId : places.id
-    }).pipe(
-      tap((data)=>{
-        this.userPlaces.update((currentData)=>{
-          return [...currentData, places]
-        })
-        console.log('added place: ', places )
-      })
-    )
+  addPlaceToUserPlaces(newPlace: Place) {
+  return this.httpClient.put<{ userPlaces: Place[] }>('http://localhost:3000/user-places', {
+    placeId: newPlace.id
+  }).pipe(
+    tap(() => {
+      this.userPlaces.update((currentData) => {
+        // 1. Check if the place is already in the list
+        const exists = currentData.some((p) => p.id === newPlace.id);
 
+        // 2. If it exists, return the current data unchanged
+        if (exists) {
+          return currentData;
+        }
 
-  }
-
-  removeUserPlace(place: Place) {
-    this.httpClient.delete(`http://localhost:3000/user-places/:${place.id}`).pipe(
-      tap(()=>{
-        this.userPlaces.update((currentData)=>{
-          return this.userPlaces().filter((placesData)=>{
-            return placesData.id !== place.id
-          })
-        })
-      })
-    )
-
-
+        // 3. If it's new, add it to the array
+        return [...currentData, newPlace];
+      });
+    })
+  );
 }
 
+
+removeUserPlace(place: Place) {
+  return this.httpClient.delete(`http://localhost:3000/user-places/${place.id}`).pipe(
+    tap(() => {
+      this.userPlaces.update((currentData) => 
+        currentData.filter((p) => p.id !== place.id)
+      );
+    }),
+    catchError((error) => {
+      // Logic to handle the error (e.g., showing a notification)
+      console.error('Could not delete place', error);
+      return throwError(() => new Error('Failed to delete the place.'));
+    })
+  );
+}
 }

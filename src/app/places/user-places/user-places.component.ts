@@ -33,8 +33,8 @@ constructor(
     this.placeService.loadUserPlaces().subscribe()
   }
 
-  deleteUserPlace(place: Place[]){
-    this.placeService.removeUserPlace(place)
+  deleteUserPlace(place: Place){
+    this.placeService.removeUserPlace(place).subscribe()
 }
 
 
