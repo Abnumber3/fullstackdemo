@@ -5,6 +5,8 @@ import { PlacesContainerComponent } from '../places-container/places-container.c
 import { HttpClient } from '@angular/common/http';
 import { PlacesService } from '../places.service';
 import { finalize } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+
 
 
 @Component({
@@ -32,7 +34,7 @@ export class AvailablePlacesComponent implements OnInit {
 
   ngOnInit(): void {
     this.isFetching.set(true)
-    this.placesService.loadAvailablePlaces().pipe(
+    const loadPlace = this.placesService.loadAvailablePlaces().pipe(
       finalize(()=>{
         this.isFetching.set(false)
       })
@@ -40,8 +42,20 @@ export class AvailablePlacesComponent implements OnInit {
       next: ((data)=>{
         this.places.set(data.places)
         console.log(data.places)
+      }),
+
+      error: ((err)=>{
+        console.log('unable to fetch available places ', err)
       })
     })
+    this.destroyRef.onDestroy(()=>{
+      loadPlace.unsubscribe();
+      
+    })
+  }
+
+  addToUser(place: Place){
+    this.placesService.addPlaceToUserPlaces(place).subscribe()
   }
 
 
