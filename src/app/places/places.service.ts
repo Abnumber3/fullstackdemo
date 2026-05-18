@@ -59,7 +59,9 @@ export class PlacesService {
     tap(() => {
       this.userPlaces.update((currentData) => {
         // 1. Check if the place is already in the list
-        const exists = currentData.some((p) => p.id === newPlace.id);
+        const exists = currentData.some((p)=>{
+          return p.id === newPlace.id
+        })
 
         // 2. If it exists, return the current data unchanged
         if (exists) {
