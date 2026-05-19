@@ -3,6 +3,7 @@ import { Place } from './place.model';
 import { HttpClient } from '@angular/common/http';
 import { tap, catchError } from 'rxjs';
 import { throwError } from 'rxjs';
+import { ErrorService } from '../shared/error.service';
 
 
 @Injectable({
@@ -17,7 +18,11 @@ export class PlacesService {
   loadedUserPlaces = this.userPlaces.asReadonly();
 
 
-  constructor(private httpClient: HttpClient){}
+  constructor(
+    private httpClient: HttpClient,
+    private errorService: ErrorService
+  
+  ){}
 
 
 
@@ -26,6 +31,13 @@ export class PlacesService {
   return   this.httpClient.get<{places: Place[]}>('http://localhost:3000/places').pipe(
       tap((data)=>{
         console.log('places ' + data)
+      }),
+      catchError((error)=>{
+        console.error(error)
+        this.errorService.showError('Unable To load available places.')
+        return throwError(()=>{
+          return error
+        })
       })
     )
 
