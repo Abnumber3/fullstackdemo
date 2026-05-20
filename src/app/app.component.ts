@@ -15,8 +15,8 @@ export class AppComponent {
 
   error = this.errorService.error;
 
-  constructor(private errorService: ErrorService){}
 
+  constructor(private errorService: ErrorService){}
 
 
 }

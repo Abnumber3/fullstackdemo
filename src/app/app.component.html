@@ -1,6 +1,11 @@
-@if(error()){
-  <app-error-modal title="An error Occured" [message]="error()"></app-error-modal>
+@if(error())
+{
+  <app-error-modal
+  [message]="error()"
+  title="Error Message"
+  ></app-error-modal>
 }
+
 
 <header>
   <img src="logo.png" alt="Stylized globe" />

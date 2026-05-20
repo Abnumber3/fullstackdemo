@@ -6,6 +6,7 @@ import { throwError } from 'rxjs';
 import { ErrorService } from '../shared/error.service';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,7 +22,6 @@ export class PlacesService {
   constructor(
     private httpClient: HttpClient,
     private errorService: ErrorService
-  
   ){}
 
 
@@ -33,15 +33,13 @@ export class PlacesService {
         console.log('places ' + data)
       }),
       catchError((error)=>{
-        console.error(error)
-        this.errorService.showError('Unable To load available places.')
+        console.error(error);
+        this.errorService.showError('Problem loading available places.');
         return throwError(()=>{
-          return error
+          return new Error
         })
       })
-    )
-
-  
+    )  
   }
 
   loadUserPlaces() {
@@ -90,16 +88,20 @@ export class PlacesService {
 
 removeUserPlace(place: Place) {
   return this.httpClient.delete(`http://localhost:3000/user-places/${place.id}`).pipe(
-    tap(() => {
-      this.userPlaces.update((currentData) => 
-        currentData.filter((p) => p.id !== place.id)
-      );
+    tap(()=>{
+      this.userPlaces.update((currentData)=>{
+       return currentData.filter((data)=>{
+        return data.id !== place.id
+       })
+      })
     }),
-    catchError((error) => {
-      // Logic to handle the error (e.g., showing a notification)
-      console.error('Could not delete place', error);
-      return throwError(() => new Error('Failed to delete the place.'));
+    catchError((error)=>{
+      console.error('error deleting user place')
+
+      return throwError(()=>{
+        new Error('Error deleting')
+      })
     })
-  );
+  )
 }
 }
