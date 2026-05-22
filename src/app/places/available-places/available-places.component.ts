@@ -41,7 +41,7 @@ export class AvailablePlacesComponent implements OnInit {
     ).subscribe({
       next: ((data)=>{
         this.places.set(data.places)
-        console.log(data.places)
+        console.log(data.places + 'places')
       }),
 
       error: ((err)=>{
