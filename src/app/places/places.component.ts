@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { PlacesService } from './places.service';
+
 import { Place } from './place.model';
 
 @Component({
@@ -13,12 +13,11 @@ export class PlacesComponent {
   places = input.required<Place[]>();
   selectPlace = output<Place>();
 
-  constructor(private placesSerivce: PlacesService){}
+
 
 
 
   onSelectPlace(place: Place) {
-   this.selectPlace.emit(place);
-   console.log(place)
+  
   }
 }
