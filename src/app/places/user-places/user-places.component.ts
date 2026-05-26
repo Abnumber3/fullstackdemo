@@ -15,7 +15,7 @@ import { PlacesService } from '../places.service';
 })
 export class UserPlacesComponent implements OnInit {
 
-   places = this.placeService.loadedUserPlaces;
+places = this.placesService.loadedUserPlaces;
 
 
 
@@ -23,18 +23,17 @@ export class UserPlacesComponent implements OnInit {
 
 
 constructor(
-  private placeService: PlacesService,
-  private destroyRef: DestroyRef
+  private placesService: PlacesService,
 ) {}
   
 
 
   ngOnInit(): void {
-    this.placeService.loadUserPlaces().subscribe()
+    this.placesService.loadUserPlaces().subscribe();
   }
 
   deleteUserPlace(place: Place){
-    this.placeService.removeUserPlace(place).subscribe()
+   this.placesService.removeUserPlace(place).subscribe();
 }
 
 

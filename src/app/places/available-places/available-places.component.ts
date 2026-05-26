@@ -2,7 +2,10 @@ import { Component, signal, OnInit, DestroyRef } from '@angular/core';
 import { Place } from '../place.model';
 import { PlacesComponent } from '../places.component';
 import { PlacesContainerComponent } from '../places-container/places-container.component';
-import { finalize } from 'rxjs/operators';
+import { PlacesService } from '../places.service';
+import {finalize} from 'rxjs/operators';
+
+
 
 
 
@@ -23,17 +26,32 @@ export class AvailablePlacesComponent implements OnInit {
 
 
   constructor(
-   
+   private placesService: PlacesService,
+   private destroyRef: DestroyRef
   ) {}
 
 
 
 
   ngOnInit(): void {
- 
+    this.isFetching.set(true);
+   const subscription = this.placesService.loadAvailablePlaces().pipe(
+      finalize(()=>{
+        this.isFetching.set(false);
+      })
+    ).subscribe((data)=>{
+      this.places.set(data.places);
+      console.log(data.places); 
+    })
+
+    this.destroyRef.onDestroy(()=>{
+      subscription.unsubscribe();
+    })
+    
   }
 
   addToUser(place: Place){
+    this.placesService.addPlaceToUserPlaces(place).subscribe();
     
   }
 
