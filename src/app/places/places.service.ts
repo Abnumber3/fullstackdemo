@@ -42,14 +42,14 @@ export class PlacesService {
     {placeId: place.id}
   ).pipe(
     tap(()=>{
-      this.userPlaces.update((currentPlaces)=>{
-        if(!currentPlaces.some((p)=>{
+      this.userPlaces.update((currentUserPlace)=>{
+        if(!currentUserPlace.some((p)=>{
           return p.id === place.id;
         })){
-          return [...currentPlaces, place];
+          return [...currentUserPlace, place];
         }
-        console.log('duplicate entry ' + place.id);
-        return  currentPlaces ;
+        console.log('Place already exists in user places');
+        return currentUserPlace;
       })
     })
   )
