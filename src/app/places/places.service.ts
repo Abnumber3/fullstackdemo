@@ -48,7 +48,7 @@ export class PlacesService {
         })){
           return [...currentUserPlace, place];
         }
-        console.log('Place already exists in user places');
+        console.log('Place already exists in user places.');
         return currentUserPlace;
       })
     })
