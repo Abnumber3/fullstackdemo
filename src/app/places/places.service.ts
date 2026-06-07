@@ -55,7 +55,7 @@ constructor(private http: HttpClient){}
       })){
         return [...currentPlaces, place];
       }
-      console.warn(`Place with id ${place.id} is already in user places.`);
+      console.warn(`Place with id ${place.id} is already in user places component.`);
       return this.userPlaces();
         
       })
