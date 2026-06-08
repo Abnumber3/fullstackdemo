@@ -2,7 +2,10 @@ import { signal } from '@angular/core';
 import { Place } from './place.model';
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap} from 'rxjs/operators';
+import { tap, catchError} from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { ErrorService } from '../shared/error.service';
+
 
 
 
@@ -21,7 +24,11 @@ export class PlacesService {
 
 //  apiUrl = 'http://localhost:3000/places';
 
-constructor(private http: HttpClient){}
+constructor(
+  private http: HttpClient,
+  private errorService: ErrorService
+
+){}
 
 
 
@@ -35,7 +42,6 @@ constructor(private http: HttpClient){}
   }
 
   loadUserPlaces() {
-
     return this.http.get<{places: Place[]}>('http://localhost:3000/user-places').pipe(
       tap((data)=>{
         this.userPlaces.set(data.places);
@@ -55,12 +61,14 @@ constructor(private http: HttpClient){}
       })){
         return [...currentPlaces, place];
       }
-      console.warn(`Place with id ${place.id} is already in user places component.`);
-      return this.userPlaces();
+      this.errorService.showError('This place is already in your list of places.');
+      console.log('Place already exists in user places:', place);
+      return currentPlaces;
         
       })
-    })
-  )
+    }),
+
+  ) 
 }
 
 
