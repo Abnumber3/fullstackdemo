@@ -18,14 +18,22 @@ export class UserPlacesComponent implements OnInit {
 places = this.placesService.loadedUserPlaces;
 
   
-  constructor(private placesService: PlacesService){}
+  constructor(
+    private placesService: PlacesService,
+    private destroyRef: DestroyRef
+  
+  ){}
 
   ngOnInit(): void {
    this.placesService.loadUserPlaces().subscribe();
   }
 
   deleteUserPlace(place: Place){
-    this.placesService.removeUserPlace(place).subscribe();
+   const subscription =  this.placesService.removeUserPlace(place).subscribe();
+
+    this.destroyRef.onDestroy(()=>{
+      subscription.unsubscribe();
+    })
 }
 
 

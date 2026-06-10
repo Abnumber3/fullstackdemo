@@ -14,8 +14,6 @@ import { ErrorModalComponent } from './shared/modal/error-modal/error-modal.comp
 export class AppComponent {
 
   error = this.errorService.error;
-
-
   constructor(private errorService: ErrorService){}
 
 

@@ -35,7 +35,7 @@ export class AvailablePlacesComponent implements OnInit {
 
   ngOnInit(): void {
     this.isFetching.set(true);
-    this.placesService.loadAvailablePlaces().pipe(
+   const subscription = this.placesService.loadAvailablePlaces().pipe(
       finalize(()=>{
         this.isFetching.set(false);
       })
@@ -47,6 +47,10 @@ export class AvailablePlacesComponent implements OnInit {
       error: (error)=>{
         console.error('Error fetching places:', error);
       }
+    })
+
+    this.destroyRef.onDestroy(()=>{
+      subscription.unsubscribe();
     })
     
   }
